@@ -21,5 +21,10 @@
     "ultimate"
   ],
   "author": "Tobias Gurtzick <magic@wizardtales.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "deasync": "0.0.7",
+    "mariasql": "^0.1.21",
+    "umigrate-db-basedriver": "^0.1.0"
+  }
 }
