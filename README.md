@@ -1,5 +1,5 @@
-[![Dependency Status](https://david-dm.org/wzrdtales/node-umigrate-mariadb.svg)](https://david-dm.org/wzrdtales/node-umigrate-mariadb) 
-[![devDependency Status](https://david-dm.org/wzrdtales/node-umigrate-mariadb/dev-status.svg)](https://david-dm.org/wzrdtales/node-umigrate-mariadb#info=devDependencies)
+[![Dependency Status](https://david-dm.org/wzrdtales/umigrate-mariadb.svg)](https://david-dm.org/wzrdtales/umigrate-mariadb) 
+[![devDependency Status](https://david-dm.org/wzrdtales/umigrate-mariadb/dev-status.svg)](https://david-dm.org/wzrdtales/umigrate-mariadb#info=devDependencies)
 
 # Ultimate Migrate MariaDB Driver
 
