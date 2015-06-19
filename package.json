@@ -23,8 +23,8 @@
   "author": "Tobias Gurtzick <magic@wizardtales.com>",
   "license": "MIT",
   "dependencies": {
-    "deasync": "^0.0.10",
-    "mariasql": "^0.1.22",
+    "deasync": "^0.1.0",
+    "mariasql": "^0.1.23",
     "umigrate-db-basedriver": "^0.1.0"
   }
 }
