@@ -53,15 +53,15 @@ MariasqlDriver.prototype = {
 
             for( var d = 0; d < 2; ++d )
             {
-                db[ c ][ d ] = Array(); 
+                db[ c ][ d ] = Array();
             }
         }
 
         var query = util.format( 'USE %s; SHOW FULL TABLES', config.database );
-        this.runSql( query, true )
+        this.runSql( query, null, { useArray: true } )
             .on( 'result', function ( res )
             {
-                res.on( 'row', function ( row )
+                res.on( 'data', function ( row )
                 {
                     if ( row[ 0 ] && row[ 1 ] === 'VIEW' )
                         db[ 0 ][ 1 ].push( row[ 0 ] );
@@ -80,10 +80,10 @@ MariasqlDriver.prototype = {
         if ( config.diffDump )
         {
             query = util.format( 'USE %s; SHOW FULL TABLES', config.database_diff );
-            this.runSql( query, true )
+            this.runSql( query, null, { useArray: true } )
                 .on( 'result', function ( res )
                 {
-                    res.on( 'row', function ( row )
+                    res.on( 'data', function ( row )
                     {
                         if ( row[ 0 ] && row[ 1 ] === 'VIEW' )
                             db[ 1 ][ 1 ].push( row[ 0 ] );
@@ -141,7 +141,7 @@ MariasqlDriver.prototype = {
             db = Array(),
             diff = Array(),
             first = true,
-            extraValues = 
+            extraValues =
             {
                 'auto_increment': 'ai',
                 'on update CURRENT_TIMESTAMP': 'OUCT'
@@ -169,11 +169,11 @@ MariasqlDriver.prototype = {
             //scoping stmt and interator to event
             ( function ( stmt, i )
             {
-                self.runSql( query, true )
+                self.runSql( query, null, { useArray: true } )
                     .on( 'result', function ( res )
                     {
                         var local = stmt++;
-                        res.on( 'row', function ( row )
+                        res.on( 'data', function ( row )
                         {
                             var _match = row[ 1 ].match( /^(.*)\(([0-9\,]+)\) ?(.*)?/ );
 
@@ -232,10 +232,10 @@ MariasqlDriver.prototype = {
         diff[ 1 ] = Array();
 
         var query = 'SELECT name, modified, type FROM mysql.proc WHERE db = ?';
-        this.runSql( query, [ config.database ], false )
+        this.runSql( query, [ config.database ] )
             .on( 'result', function ( res )
             {
-                res.on( 'row', function ( row )
+                res.on( 'data', function ( row )
                 {
                     if ( row.type === 'FUNCTION' )
                         db[ 0 ].push( [ row.name, row.modified ] );
@@ -257,7 +257,7 @@ MariasqlDriver.prototype = {
             this.runSql( query, [ config.database_diff ], false )
                 .on( 'result', function ( res )
                 {
-                    res.on( 'row', function ( row )
+                    res.on( 'data', function ( row )
                     {
                         if ( row.type === 'FUNCTION' )
                             diff[ 0 ].push( [ row.name, row.modified ] );
@@ -304,10 +304,10 @@ MariasqlDriver.prototype = {
         db[ 0 ] = Array();
         db[ 1 ] = Array();
 
-        this.runSql( query, [ config.database ], true )
+        this.runSql( query, [ config.database ], { useArray: true } )
             .on( 'result', function ( res )
             {
-                res.on( 'row', function ( row )
+                res.on( 'data', function ( row )
                 {
                     if ( row[ 0 ] !== 'migrations' && row[ 2 ] !== null )
                         db[ 0 ].push( row );
@@ -323,10 +323,10 @@ MariasqlDriver.prototype = {
 
         if ( config.diffDump )
         {
-            this.runSql( query, [ config.database_diff ], true )
+            this.runSql( query, [ config.database_diff ], { useArray: true } )
                 .on( 'result', function ( res )
                 {
-                    res.on( 'row', function ( row )
+                    res.on( 'data', function ( row )
                     {
                         if ( row[ 0 ] !== 'migrations' && row[ 2 ] !== null )
                             db[ 1 ].push( row );
@@ -393,11 +393,11 @@ MariasqlDriver.prototype = {
             //scoping stmt and interator to event
             ( function ( stmt, i )
             {
-                self.runSql( q, true )
+                self.runSql( q, null, { useArray: true } )
                     .on( 'result', function ( res )
                     {
                         var local = stmt++;
-                        res.on( 'row', function ( row )
+                        res.on( 'data', function ( row )
                         {
                             row[ 0 ] = row[ 2 ]; //replace table by key name
                             row[ 1 ] = row[ 1 ] === '0';
@@ -498,11 +498,11 @@ MariasqlDriver.prototype = {
             //scoping stmt and interator to event
             ( function ( stmt, i )
             {
-                self.runSql( q, params, true )
+                self.runSql( q, params, { useArray: true } )
                     .on( 'result', function ( res )
                     {
                         var local = stmt++;
-                        res.on( 'row', function ( row )
+                        res.on( 'data', function ( row )
                         {
                             constraint = Array();
 
@@ -516,7 +516,7 @@ MariasqlDriver.prototype = {
                             constraint[ 4 ] = row[ 8 ]; //referenced_column_name
                             constraint[ 5 ] = row[ 7 ]; //position_in_unique_constraint
                             constraint[ 6 ] = row[ 4 ]; //on_update
-                            constraint[ 7 ] = row[ 5 ]; //on_delete              
+                            constraint[ 7 ] = row[ 5 ]; //on_delete
 
                             db[ local ][ tables.tables[ local ][ i ] ].push( constraint );
                         } );
@@ -575,7 +575,7 @@ exports.connect = function ( config, callback )
         db = config.db;
     }
 
-    db.on( 'connect', function ()
+    db.on( 'ready', function ()
     {
         callback( null, new MariasqlDriver( db ) );
         log.verbose( 'Client connected.' );

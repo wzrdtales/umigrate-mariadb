@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "deasync": "^0.1.2",
-    "mariasql": "^0.1.23",
+    "mariasql": "^0.2.0",
     "umigrate-db-basedriver": "^0.1.0"
   }
 }
