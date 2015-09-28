@@ -1,6 +1,6 @@
 {
   "name": "umigrate-mariadb",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A mariadb (mariasql) driver for umigrate.",
   "main": "index.js",
   "scripts": {
